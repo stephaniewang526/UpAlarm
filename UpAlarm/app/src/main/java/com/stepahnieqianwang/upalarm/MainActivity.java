@@ -2,6 +2,13 @@ package com.stepahnieqianwang.upalarm;
 
 import android.content.Intent;
 import android.app.Activity;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+
+import android.widget.Toast;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +27,10 @@ public class MainActivity extends Activity implements SensorEventListener{
     private Context mContext;
     SensorManager mSensorEventManager;
     Sensor mSensor;
+
+
+    private LocationManager locationManager;
+    private String provider;
 
     /** Minimum movement force to consider. */
     private static final int MIN_FORCE = 10;
@@ -143,6 +154,26 @@ public class MainActivity extends Activity implements SensorEventListener{
                 startActivity(new Intent(MainActivity.this, Community.class));
             }
         });
+
+        // gps; GPS must be enabled on phone already. Will put in code to check later
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        /*
+        // default criteria for best provider for now
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+
+
+        if (location != null) {
+            int lat = (int) (location.getLatitude());
+            int lng = (int) (location.getLongitude());
+            String msg = "Latitude: " + String.valueOf(lat) + ", Longitude: " + String.valueOf(lng);
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "No location data", Toast.LENGTH_LONG).show();
+        }
+        */
     };
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -193,6 +224,25 @@ public class MainActivity extends Activity implements SensorEventListener{
                     Log.v("sensor","movement detected");
                 }
             }
+    }
+
+    // test GPS to make sure we can extract geolocation
+    public void testGPS(View view){
+        // default criteria for best provider for now
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        if (location != null) {
+            float lat = (float) (location.getLatitude());
+            float lng = (float) (location.getLongitude());
+            String msg = "Latitude: " + String.valueOf(lat) + "\r\nLongitude: " + String.valueOf(lng);
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "No location data", Toast.LENGTH_LONG).show();
+        }
+
+        //Toast.makeText(this, "Filler", Toast.LENGTH_LONG).show();
     }
 
     @Override

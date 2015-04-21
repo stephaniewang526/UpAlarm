@@ -65,12 +65,21 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tack me!"
+        android:text="Track me!"
         android:id="@+id/btnStartService"
         android:gravity="center_vertical"
         android:layout_alignTop="@+id/btnEndService"
         android:layout_toLeftOf="@+id/btnEndService"
         android:layout_toStartOf="@+id/btnEndService" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test gps"
+        android:id="@+id/btnGPS"
+        android:layout_below="@+id/btnStartService"
+        android:layout_centerHorizontal="true"
+        android:onClick="testGPS"/>
 
     <Button
         android:layout_width="wrap_content"
