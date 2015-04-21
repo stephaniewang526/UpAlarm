@@ -203,27 +203,7 @@ public class MainActivity extends Activity implements SensorEventListener{
                 mLastDirectionChangeTime = now;
             }
 
-            // check if the last movement was not long ago
-            long lastChangeWasAgo = now - mLastDirectionChangeTime;
-            if (lastChangeWasAgo < MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE) {
-
-                // store movement data
-                mLastDirectionChangeTime = now;
-                mDirectionChangeCount++;
-
-                // store last sensor data
-                lastX = x;
-                lastY = y;
-                lastZ = z;
-
-                // check how many movements are so far
-                if (mDirectionChangeCount >= MIN_DIRECTION_CHANGE) {
-                    // calculate total duration
-                    totalDuration = now - mFirstDirectionChangeTime;
-                    }
-                    Log.v("sensor","movement detected");
-                }
-            }
+                            }
     }
 
     // test GPS to make sure we can extract geolocation
