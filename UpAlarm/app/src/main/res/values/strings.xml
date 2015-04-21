@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">UpAlarm</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="button_on">Detection On</string>
+    <string name="button_off">Detection Off</string>
+    <string name="view1">It\'s been</string>
+    <string name="view3">Since you last moved!</string>
+    <string name="button_community">Community</string>
+    <string name="community_name">Community</string>
+    <string name="button_history">History</string>
+    <string name="history_name">Your History</string>
+    <string name="button_home">Home</string>
+    <string name="button_karma">Actkarma</string>
+    <string name="title_activity_history">History</string>
+    <string name="title_activity_actkarma">Actkarma</string>
+    <string name="actkarma_name">Actkarma</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_community">Community</string>
+
+</resources>
