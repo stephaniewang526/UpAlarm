@@ -84,21 +84,6 @@ public class MainActivity extends ActionBarActivity implements
      * activity is displayed with the correct confidence level upon orientation changes.
      */
     private ArrayList<DetectedActivity> mDetectedActivities;
-
-    //Record time
-    long totalDuration;
-
-    /** Time when the gesture started. */
-    private long mFirstDirectionChangeTime = 0;
-
-    /** Time when the last movement started. */
-    private long mLastDirectionChangeTime;
-
-    /** How many movements are considered so far. */
-    private int mDirectionChangeCount = 0;
-
-    /** Maximum pause between movements. */
-    private static final int MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE = 200;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,29 +177,6 @@ public class MainActivity extends ActionBarActivity implements
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
-
-        // get time
-        long now = System.currentTimeMillis();
-
-        // store first movement time
-        if (mFirstDirectionChangeTime == 0) {
-            mFirstDirectionChangeTime = now;
-            mLastDirectionChangeTime = now;
-        }
-
-        // check if the last movement was not long ago
-        long lastChangeWasAgo = now - mLastDirectionChangeTime;
-        if (lastChangeWasAgo < MAX_PAUSE_BETHWEEN_DIRECTION_CHANGE) {
-
-            // store movement data
-            mLastDirectionChangeTime = now;
-            mDirectionChangeCount++;
-
-            // store last sensor data
-
-            // calculate total duration
-            totalDuration = now - mFirstDirectionChangeTime;
-        }
 
     }
 

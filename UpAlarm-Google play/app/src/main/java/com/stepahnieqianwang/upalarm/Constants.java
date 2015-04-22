@@ -38,7 +38,6 @@ public final class Constants {
      */
     protected static final int[] MONITORED_ACTIVITIES = {
             DetectedActivity.STILL,
-            DetectedActivity.ON_FOOT,
     };
 
     /**
@@ -49,8 +48,6 @@ public final class Constants {
         switch(detectedActivityType) {
             case DetectedActivity.STILL:
                 return resources.getString(R.string.still);
-            case DetectedActivity.ON_FOOT:
-                return resources.getString(R.string.on_foot);
             default:
                 return resources.getString(R.string.unidentifiable_activity, detectedActivityType);
         }

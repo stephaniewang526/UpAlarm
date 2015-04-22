@@ -18,6 +18,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DetectedActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
+    //Record time
+    long totalDuration;
+
+    /** Time when the gesture started. */
+    private long mFirstDirectionChangeTime = 0;
+
+    /** Time when the last movement started. */
+    private long mLastDirectionChangeTime;
 
     public DetectedActivitiesAdapter(Context context,
                                      ArrayList<DetectedActivity> detectedActivities) {
@@ -32,17 +40,49 @@ public class DetectedActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
                     R.layout.detected_activity, parent, false);
         }
 
+        // get time
+        long now = System.currentTimeMillis();
+
+
         // Find the UI widgets.
         TextView activityName = (TextView) view.findViewById(R.id.detected_activity_name);
-        TextView activityConfidenceLevel = (TextView) view.findViewById(R.id.detected_activity_confidence_level);
+        TextView activityPercentage = (TextView) view.findViewById(R.id.detected_activity_confidence_level);
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.detected_activity_progress_bar);
 
         // Populate widgets with values.
         activityName.setText(Constants.getActivityString(getContext(),
                 detectedActivity.getType()));
-        activityConfidenceLevel.setText(detectedActivity.getConfidence() + "%");
+
+        int still_confidence = getItem(0).getConfidence();
+        int num_sitting = 0;
+        int num_foot = 0;
+
+        if (still_confidence > 30){
+            detectedActivity = getItem(0);
+
+            if (mFirstDirectionChangeTime == 0) {
+                mFirstDirectionChangeTime = now;
+                mLastDirectionChangeTime = now;
+            }
+
+            mLastDirectionChangeTime = now;
+            totalDuration = (now - mFirstDirectionChangeTime)/1000;
+            num_sitting++;
+        }else{
+            num_foot++;
+        }
+
+        int num_sum = num_sitting + num_foot;
+        int percentage_sitting = (num_sitting / num_sum) * 100;
+
         //how likely this activity is correctly detected
-        progressBar.setProgress(detectedActivity.getConfidence());
+        //detectedActivity.getConfidence() + "%"
+        if(totalDuration <= 60000){
+            activityPercentage.setText(totalDuration + " seconds");
+        }else{
+            activityPercentage.setText(totalDuration/60 + " mins");
+        }
+        progressBar.setProgress(percentage_sitting); //detectedActivity.getConfidence()
         return view;
     }
 
