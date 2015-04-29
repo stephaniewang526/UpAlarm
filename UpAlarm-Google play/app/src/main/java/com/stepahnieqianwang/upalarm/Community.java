@@ -1,5 +1,6 @@
 package com.stepahnieqianwang.upalarm;
 
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.MenuItem;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.*;
 import com.google.android.gms.location.LocationServices;
 
@@ -32,6 +34,7 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.Random;
 
 
 public class Community extends ActionBarActivity implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener{
@@ -41,8 +44,14 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
      */
     protected GoogleApiClient mGoogleApiClient;
     protected boolean playConnected;
+    protected boolean hasDrawn;
     protected Location mLastLocation;
     protected GoogleMap gMap;
+
+    protected int RED = Color.argb(50, 255, 0, 0);
+    protected int GREEN = Color.argb(50, 0, 255, 0);
+    protected int BLUE = Color.argb(50, 0, 0, 255);
+    protected int YELLOW = Color.argb(50, 255, 255, 0);
 
     private Context context;
 
@@ -90,23 +99,100 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
         // updates. Gets the best and most recent location currently available, which may be null
         // in rare cases when a location is not available.
         Context context = getApplicationContext();
-        Toast.makeText(context, "Initial Connect!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Initial Connect!", Toast.LENGTH_SHORT).show();
         playConnected = true;
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        Toast.makeText(context, String.valueOf(mLastLocation.getLatitude()) + ", " +
-                String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, String.valueOf(mLastLocation.getLatitude()) + ", " +
+        //        String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_SHORT).show();
 
         LatLng ith = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
         gMap.setMyLocationEnabled(true);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ith, 17));
 
+        /*
         gMap.addMarker(new MarkerOptions()
                 .title("Ithaca")
                 .snippet("It's Gorges")
-                .position(ith));
+                .position(ith))
+                .setFlat(true);
+        */
+        if (!hasDrawn) {
+            CircleOptions circleOptions = new CircleOptions()
+                    .fillColor(BLUE)
+                    .strokeColor(BLUE)
+                    .center(ith)
+                    .radius(5); // In meters
+
+            // roughly barton
+            LatLng hub1 = new LatLng(   mLastLocation.getLatitude() + 0.0012f,
+                                        mLastLocation.getLongitude() + 0.0005f);
+
+            // roughly phillips
+            LatLng hub2 = new LatLng(   mLastLocation.getLatitude() - 0.0002,
+                                        mLastLocation.getLongitude() - 0.0012f);
+
+            CircleOptions circleO2 = new CircleOptions()
+                    .fillColor(RED)
+                    .strokeColor(RED)
+                    .center(hub1)
+                    .radius(5); // In meters
+
+            CircleOptions circleO3 = new CircleOptions()
+                    .fillColor(YELLOW)
+                    .strokeColor(YELLOW)
+                    .center(hub2)
+                    .radius(5);
+
+            CircleOptions tmpCO = new CircleOptions().radius(5); // In meters;
+            Random myRand = new Random();
+            for (int i = 0; i < 20; i++) {
+                int rndColor = myRand.nextInt(4);
+                int tmpColor;
+                switch (rndColor) {
+                    case 1:
+                        tmpColor = GREEN;
+                        break;
+                    case 2:
+                        tmpColor = BLUE;
+                        break;
+                    case 3:
+                        tmpColor = YELLOW;
+                        break;
+                    case 0:
+                    default:
+                        tmpColor = RED;
+                        break;
+                }
+
+                tmpCO.fillColor(tmpColor)
+                    .strokeColor(tmpColor)
+                    .center(new LatLng(
+                            hub1.latitude + (myRand.nextFloat()*5 -2.5f) * 0.0001f,
+                            hub1.longitude + (myRand.nextFloat()*12 - 6.0f) * 0.0001f));
+                gMap.addCircle(tmpCO);
+                tmpCO.center(new LatLng(
+                        hub2.latitude + (myRand.nextFloat()*7 -3.5f) * 0.0001f,
+                        hub2.longitude + (myRand.nextFloat()*5 - 2.5f) * 0.0001f));
+                gMap.addCircle(tmpCO);
+                if (i%2==0) {
+                    tmpCO.center(new LatLng(
+                            mLastLocation.getLatitude() + (myRand.nextFloat() * 5 - 2.5f) * 0.0001f,
+                            mLastLocation.getLongitude() + (myRand.nextFloat() * 7 - 1.5f) * 0.0001f));
+                    gMap.addCircle(tmpCO);
+                }
+            }
+
+            // Get back the mutable Circle
+            Circle circle = gMap.addCircle(circleOptions);
+            Circle circle2 = gMap.addCircle(circleO2);
+            Circle circle3 = gMap.addCircle(circleO3);
+
+            hasDrawn = true;
+        }
+
     }
 
     @Override
