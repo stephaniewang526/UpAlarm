@@ -10,6 +10,8 @@ import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 import com.google.android.gms.location.LocationServices;
 
+import android.content.Context;
+
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -40,6 +42,9 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
     protected GoogleApiClient mGoogleApiClient;
     protected boolean playConnected;
     protected Location mLastLocation;
+    protected GoogleMap gMap;
+
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,7 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        context = getApplicationContext();
         buildGoogleApiClient();
     }
 
@@ -84,12 +89,24 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
         // applications that do not require a fine-grained location and that do not need location
         // updates. Gets the best and most recent location currently available, which may be null
         // in rare cases when a location is not available.
+        Context context = getApplicationContext();
+        Toast.makeText(context, "Initial Connect!", Toast.LENGTH_SHORT).show();
         playConnected = true;
+
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            //mLastLocation.getLatitude()));
-            //mLastLocation.getLongitude()));
-        }
+
+        Toast.makeText(context, String.valueOf(mLastLocation.getLatitude()) + ", " +
+                String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_SHORT).show();
+
+        LatLng ith = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+        gMap.setMyLocationEnabled(true);
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ith, 17));
+
+        gMap.addMarker(new MarkerOptions()
+                .title("Ithaca")
+                .snippet("It's Gorges")
+                .position(ith));
     }
 
     @Override
@@ -97,6 +114,8 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
         // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
         // onConnectionFailed.
         //Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+        Context context = getApplicationContext();
+        Toast.makeText(context, "Connection Failed!", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -105,12 +124,18 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
         // The connection to Google Play services was lost for some reason. We call connect() to
         // attempt to re-establish the connection.
         //Log.i(TAG, "Connection suspended");
+        Context context = getApplicationContext();
+        Toast.makeText(context, "Connection Suspended!", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
+        /*
         if (playConnected) {
+            Context context = getApplicationContext();
+            Toast.makeText(context, String.valueOf(mLastLocation.getLatitude()) + ", " +
+                    String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_SHORT).show();
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             LatLng ith = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
@@ -121,7 +146,13 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
                     .title("Ithaca")
                     .snippet("It's Gorges")
                     .position(ith));
+        } else {
+            Context context = getApplicationContext();
+            Toast.makeText(context, "Play not connected!", Toast.LENGTH_SHORT).show();
         }
+        */
+        Toast.makeText(context, "Setting Map!", Toast.LENGTH_SHORT).show();
+        gMap = map;
     }
 
     @Override
