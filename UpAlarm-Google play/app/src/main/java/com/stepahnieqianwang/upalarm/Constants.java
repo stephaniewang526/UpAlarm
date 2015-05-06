@@ -31,10 +31,10 @@ public final class Constants {
      * fastest possible rate. Getting frequent updates negatively impact battery life and a real
      * app may prefer to request less frequent updates.
      */
-    public static final long DETECTION_INTERVAL_IN_MILLISECONDS = 0;//immediately
+    public static final long DETECTION_INTERVAL_IN_MILLISECONDS = 30000;//immediately
 
     /**
-     * List of DetectedActivity types that we monitor in this sample.
+     * List of DetectedActivity types that we monitor.
      */
     protected static final int[] MONITORED_ACTIVITIES = {
             DetectedActivity.STILL,

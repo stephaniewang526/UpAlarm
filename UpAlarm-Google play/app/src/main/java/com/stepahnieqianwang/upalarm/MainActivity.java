@@ -14,9 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,11 +23,31 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.DetectedActivity;
-
 import java.util.ArrayList;
 
+//for HTTP request
+import java.io.IOException;
+import java.util.List;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import android.os.AsyncTask;
+
+//get Date and time
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
- * This sample demonstrates use of the
+ * We use
  * {@link com.google.android.gms.location.ActivityRecognitionApi} to recognize a user's current
  * activity, such as walking, driving, or standing still. It uses an
  * {@link android.app.IntentService} to broadcast detected activities through a
@@ -49,7 +66,7 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity implements
         ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
 
-    protected static final String TAG = "activity-recognition";
+    protected static final String TAG = "UpAlarm";
 
     /**
      * A receiver for DetectedActivity objects broadcast by the
@@ -159,7 +176,105 @@ public class MainActivity extends ActionBarActivity implements
 
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
+
+        //HTTP request
+        // we are going to use asynctask to prevent network on main thread exception
+        new PostDataAsyncTask().execute();
     }
+
+    //HTTP request code start
+    public class PostDataAsyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // do stuff before posting data
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+
+                // 1 = post text data, 2 = post file
+                int actionChoice = 1;
+
+                // post a text data
+                if(actionChoice==1){
+                    postText();
+                }
+
+                // post a file
+                else{
+                }
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String lenghtOfFile) {
+            // do stuff after posting data
+            setUpdatesRequestedState(true);
+        }
+    }
+
+    // this will post our text data
+    private void postText(){
+        // get time
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        //get current date time with Date()
+        Date date = new Date();
+        String currentTime = dateFormat.format(date);
+
+        int userID = 10;
+
+        try{
+            // url where the data will be posted
+            String postReceiverUrl = "http://52.11.244.12/data.php";
+            Log.v(TAG, "postURL: " + postReceiverUrl);
+            Log.v(TAG, "time now is: " + currentTime);
+
+            // HttpClient
+            HttpClient httpClient = new DefaultHttpClient();
+
+            // post header
+            HttpPost httpPost = new HttpPost(postReceiverUrl);
+
+            // add your data
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+            nameValuePairs.add(new BasicNameValuePair("userID", String.valueOf(userID)));
+            nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
+            if (Constants.DETECTED_ACTIVITIES == "STILL"){
+                nameValuePairs.add(new BasicNameValuePair("activity", "0"));
+            }else{
+                nameValuePairs.add(new BasicNameValuePair("activity", "1"));
+            }
+            //condition statements for location color
+            nameValuePairs.add(new BasicNameValuePair("color", "red"));
+
+
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+            // execute HTTP post request
+            HttpResponse response = httpClient.execute(httpPost);
+            HttpEntity resEntity = response.getEntity();
+
+            if (resEntity != null) {
+                String responseStr = EntityUtils.toString(resEntity).trim();
+                Log.v(TAG, "Response: " +  responseStr);
+
+                // you can add an if statement here and do other actions based on the response
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //end HTTP request code
 
     /**
      * Builds a GoogleApiClient. Uses the {@code #addApi} method to request the
@@ -240,11 +355,11 @@ public class MainActivity extends ActionBarActivity implements
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
+       ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(
                 mGoogleApiClient,
                 Constants.DETECTION_INTERVAL_IN_MILLISECONDS,
                 getActivityDetectionPendingIntent()
-        ).setResultCallback(this);
+       ).setResultCallback(this);
     }
 
     /**

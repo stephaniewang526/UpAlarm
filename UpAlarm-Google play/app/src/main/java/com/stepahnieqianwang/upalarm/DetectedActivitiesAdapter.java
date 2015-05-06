@@ -22,10 +22,7 @@ public class DetectedActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
     long totalDuration;
 
     /** Time when the gesture started. */
-    private long mFirstDirectionChangeTime = 0;
-
-    /** Time when the last movement started. */
-    private long mLastDirectionChangeTime;
+    private long startTime = 0;
 
     public DetectedActivitiesAdapter(Context context,
                                      ArrayList<DetectedActivity> detectedActivities) {
@@ -34,7 +31,7 @@ public class DetectedActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        DetectedActivity detectedActivity = getItem(position);
+        DetectedActivity stillActivity = getItem(position);
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(
                     R.layout.detected_activity, parent, false);
@@ -43,7 +40,6 @@ public class DetectedActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
         // get time
         long now = System.currentTimeMillis();
 
-
         // Find the UI widgets.
         TextView activityName = (TextView) view.findViewById(R.id.detected_activity_name);
         TextView activityPercentage = (TextView) view.findViewById(R.id.detected_activity_confidence_level);
@@ -51,22 +47,18 @@ public class DetectedActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
 
         // Populate widgets with values.
         activityName.setText(Constants.getActivityString(getContext(),
-                detectedActivity.getType()));
+                stillActivity.getType()));
 
-        int still_confidence = getItem(0).getConfidence();
+        int still_confidence = stillActivity.getConfidence();
         int num_sitting = 0;
         int num_foot = 0;
 
         if (still_confidence > 30){
-            detectedActivity = getItem(0);
 
-            if (mFirstDirectionChangeTime == 0) {
-                mFirstDirectionChangeTime = now;
-                mLastDirectionChangeTime = now;
+            if (startTime == 0) {
+                startTime = now;
             }
-
-            mLastDirectionChangeTime = now;
-            totalDuration = (now - mFirstDirectionChangeTime)/1000;
+            totalDuration = (now - startTime)/1000;
             num_sitting++;
         }else{
             num_foot++;
