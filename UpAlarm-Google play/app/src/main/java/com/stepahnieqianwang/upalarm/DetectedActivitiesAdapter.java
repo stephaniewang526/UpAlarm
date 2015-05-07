@@ -31,7 +31,7 @@ public class DetectedActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        DetectedActivity stillActivity = getItem(position);
+        DetectedActivity stillActivity = getItem(0);
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(
                     R.layout.detected_activity, parent, false);
@@ -53,7 +53,7 @@ public class DetectedActivitiesAdapter extends ArrayAdapter<DetectedActivity> {
         int num_sitting = 0;
         int num_foot = 0;
 
-        if (still_confidence > 30){
+        if (still_confidence > 50){
 
             if (startTime == 0) {
                 startTime = now;

@@ -176,104 +176,10 @@ public class MainActivity extends ActionBarActivity implements
 
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
-
-        //HTTP request
-        // we are going to use asynctask to prevent network on main thread exception
-        new PostDataAsyncTask().execute();
     }
 
     //HTTP request code start
-    public class PostDataAsyncTask extends AsyncTask<String, String, String> {
 
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // do stuff before posting data
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-
-                // 1 = post text data, 2 = post file
-                int actionChoice = 1;
-
-                // post a text data
-                if(actionChoice==1){
-                    postText();
-                }
-
-                // post a file
-                else{
-                }
-
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String lenghtOfFile) {
-            // do stuff after posting data
-            setUpdatesRequestedState(true);
-        }
-    }
-
-    // this will post our text data
-    private void postText(){
-        // get time
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        //get current date time with Date()
-        Date date = new Date();
-        String currentTime = dateFormat.format(date);
-
-        int userID = 10;
-
-        try{
-            // url where the data will be posted
-            String postReceiverUrl = "http://52.11.244.12/data.php";
-            Log.v(TAG, "postURL: " + postReceiverUrl);
-            Log.v(TAG, "time now is: " + currentTime);
-
-            // HttpClient
-            HttpClient httpClient = new DefaultHttpClient();
-
-            // post header
-            HttpPost httpPost = new HttpPost(postReceiverUrl);
-
-            // add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-            nameValuePairs.add(new BasicNameValuePair("userID", String.valueOf(userID)));
-            nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
-            if (Constants.DETECTED_ACTIVITIES == "STILL"){
-                nameValuePairs.add(new BasicNameValuePair("activity", "0"));
-            }else{
-                nameValuePairs.add(new BasicNameValuePair("activity", "1"));
-            }
-            //condition statements for location color
-            nameValuePairs.add(new BasicNameValuePair("color", "red"));
-
-
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-            // execute HTTP post request
-            HttpResponse response = httpClient.execute(httpPost);
-            HttpEntity resEntity = response.getEntity();
-
-            if (resEntity != null) {
-                String responseStr = EntityUtils.toString(resEntity).trim();
-                Log.v(TAG, "Response: " +  responseStr);
-
-                // you can add an if statement here and do other actions based on the response
-            }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     //end HTTP request code
 
     /**
@@ -360,6 +266,8 @@ public class MainActivity extends ActionBarActivity implements
                 Constants.DETECTION_INTERVAL_IN_MILLISECONDS,
                 getActivityDetectionPendingIntent()
        ).setResultCallback(this);
+
+
     }
 
     /**
