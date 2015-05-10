@@ -329,8 +329,6 @@ public class MainActivity extends ActionBarActivity implements
             return mActivityDetectionPendingIntent;
         }
         Intent intent = new Intent(this, DetectedActivitiesIntentService.class);
-        intent.putExtra("android_id", "00001234");
-        intent.putExtra("last_loc", "");
 
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // requestActivityUpdates() and removeActivityUpdates().
