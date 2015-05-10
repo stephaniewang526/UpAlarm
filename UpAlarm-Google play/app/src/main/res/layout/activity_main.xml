@@ -67,4 +67,11 @@
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/button_actkarma"
         android:layout_toRightOf="@+id/button_actkarma" />
+
+    <TextView
+        android:id="@+id/android_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text=""/>
 </RelativeLayout>
