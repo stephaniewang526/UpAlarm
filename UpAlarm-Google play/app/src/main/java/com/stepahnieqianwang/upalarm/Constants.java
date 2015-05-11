@@ -3,8 +3,10 @@ package com.stepahnieqianwang.upalarm;
 /**
  * Created by stepahnieqianwang on 4/21/15.
  */
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.View;
 
 import com.google.android.gms.location.DetectedActivity;
 
