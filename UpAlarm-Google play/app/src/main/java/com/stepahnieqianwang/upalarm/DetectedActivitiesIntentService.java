@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.content.Context;
+import android.view.View;
 
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
@@ -17,6 +18,10 @@ import java.util.ArrayList;
 public class DetectedActivitiesIntentService extends IntentService {
     protected static final String TAG = "activity-detection-intent-service";
     protected static ArrayList<DetectedActivity> detectedActivities = new ArrayList<DetectedActivity>();
+    private String androidID;
+    private String lat;
+    private String lng;
+
     /**
      * This constructor is required, and calls the super IntentService(String)
      * constructor with the name for a worker thread.
@@ -47,6 +52,11 @@ public class DetectedActivitiesIntentService extends IntentService {
         // 0 and 100.
         detectedActivities = (ArrayList) result.getProbableActivities();
 
+        if (intent.getExtras() != null) {
+            androidID = intent.getStringExtra("androidID");
+            lat = intent.getStringExtra("lat");
+            lng = intent.getStringExtra("lng");
+        }
 
         // Log each activity.
         Log.i(TAG, "activities detected");
@@ -57,6 +67,7 @@ public class DetectedActivitiesIntentService extends IntentService {
         // Broadcast the list of detected activities.
         localIntent.putExtra(Constants.ACTIVITY_EXTRA, detectedActivities);
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
-        new PostDataAsyncTask().execute();
+        // TODO: access view somehow??
+        new PostDataAsyncTask(getApplicationContext(), ).execute();
     }
 }

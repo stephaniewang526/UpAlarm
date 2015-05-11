@@ -247,6 +247,12 @@ public class MainActivity extends ActionBarActivity implements
         Log.i(TAG, "Connected to GoogleApiClient");
         lastLoc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         Log.i(TAG, "Location is: (" + lastLoc.getLatitude() + ", " + lastLoc.getLongitude() + ")");
+
+        TextView textview_lat = (TextView) findViewById(R.id.lat);
+        TextView textview_lng = (TextView) findViewById(R.id.lng);
+
+        textview_lat.setText(""+lastLoc.getLatitude());
+        textview_lng.setText(""+lastLoc.getLongitude());
     }
 
     @Override
@@ -346,7 +352,11 @@ public class MainActivity extends ActionBarActivity implements
         if (mActivityDetectionPendingIntent != null) {
             return mActivityDetectionPendingIntent;
         }
+        // PROBLEM SPOT
         Intent intent = new Intent(this, DetectedActivitiesIntentService.class);
+        //intent.putExtra("androidID", androidID /*string_android_id*/);
+        //intent.putExtra("lat", ""+lastLoc.getLatitude());
+        //intent.putExtra("lng", ""+lastLoc.getLongitude());
 
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // requestActivityUpdates() and removeActivityUpdates().
