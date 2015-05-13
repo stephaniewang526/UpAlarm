@@ -3,7 +3,6 @@ package com.stepahnieqianwang.upalarm;
 /**
  * Created by stepahnieqianwang on 4/21/15.
  */
-import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -69,8 +68,6 @@ public class DetectedActivitiesIntentService extends IntentService {
         localIntent.putExtra(Constants.ACTIVITY_EXTRA, detectedActivities);
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
         // TODO: access view somehow??
-        Context mContext = getApplicationContext();
-        View rootView = ((Activity)mContext).getWindow().getDecorView().findViewById(android.R.id.content);
-        new PostDataAsyncTask(mContext, rootView).execute();
+        new PostDataAsyncTask(getApplicationContext(), ).execute();
     }
 }
