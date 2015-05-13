@@ -3,8 +3,6 @@ package com.stepahnieqianwang.upalarm;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.content.Context;
-import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.location.DetectedActivity;
 
@@ -31,20 +29,6 @@ import java.util.List;
  */
 public class PostDataAsyncTask extends AsyncTask<String, String, String> {
     protected static final String TAG = "Post Data";
-    private Context mContext;
-    private View rootView;
-
-    private TextView tv_lat;
-    private TextView tv_lng;
-    private TextView tv_aID;
-
-    public PostDataAsyncTask(Context context, View rootView) {
-        this.mContext = context;
-        this.rootView = rootView;
-        tv_lat = (TextView) rootView.findViewById(R.id.lat);
-        tv_lng = (TextView) rootView.findViewById(R.id.lng);
-        tv_aID = (TextView) rootView.findViewById(R.id.android_id);
-    }
 
     protected void onPreExecute() {
         super.onPreExecute();
@@ -103,13 +87,10 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String> {
             // post header
             HttpPost httpPost = new HttpPost(postReceiverUrl);
 
-
             // add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(6);
-            nameValuePairs.add(new BasicNameValuePair("userID", ""+tv_aID.getText()));
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+            nameValuePairs.add(new BasicNameValuePair("userID", String.valueOf(userID)));
             nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
-            nameValuePairs.add(new BasicNameValuePair("lat", ""+tv_lat.getText()));
-            nameValuePairs.add(new BasicNameValuePair("lng", ""+tv_lng.getText()));
             nameValuePairs.add(new BasicNameValuePair("activity", String.valueOf(activity)));
             nameValuePairs.add(new BasicNameValuePair("color", "red"));
 
