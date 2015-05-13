@@ -40,23 +40,28 @@ public class DetectedActivitiesIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
-        Intent localIntent = new Intent(Constants.BROADCAST_ACTION);
+        //if (result!=null) {
+            Intent localIntent = new Intent(Constants.BROADCAST_ACTION);
 
-        // Get the list of the probable activities associated with the current state of the
-        // device. Each activity is associated with a confidence level, which is an int between
-        // 0 and 100.
-        detectedActivities = (ArrayList) result.getProbableActivities();
+            // Get the list of the probable activities associated with the current state of the
+            // device. Each activity is associated with a confidence level, which is an int between
+            // 0 and 100.
+            detectedActivities = (ArrayList) result.getProbableActivities();
 
+            // extract aID and latlng
+            Log.i(TAG, "aID is: " + intent.getStringExtra("aID"));
+            Log.i(TAG, "latlng is: " + intent.getStringExtra("aID") + ", " + intent.getStringExtra("lng"));
 
-        // Log each activity.
-        Log.i(TAG, "activities detected");
-        for (DetectedActivity da: detectedActivities) {
-            Log.i(TAG, Constants.getActivityString(getApplicationContext(),da.getType()) + " " + da.getConfidence() + "%");
-        }
+            // Log each activity.
+            Log.i(TAG, "activities detected");
+            for (DetectedActivity da : detectedActivities) {
+                Log.i(TAG, Constants.getActivityString(getApplicationContext(), da.getType()) + " " + da.getConfidence() + "%");
+            }
 
-        // Broadcast the list of detected activities.
-        localIntent.putExtra(Constants.ACTIVITY_EXTRA, detectedActivities);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
-        new PostDataAsyncTask().execute();
+            // Broadcast the list of detected activities.
+            localIntent.putExtra(Constants.ACTIVITY_EXTRA, detectedActivities);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+            new PostDataAsyncTask().execute();
+        //}
     }
 }
