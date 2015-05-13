@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -23,6 +25,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.DetectedActivity;
+import com.google.android.gms.location.LocationServices;
+
 import java.util.ArrayList;
 
 //for HTTP request
@@ -67,6 +71,8 @@ public class MainActivity extends ActionBarActivity implements
         ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
 
     protected static final String TAG = "UpAlarm";
+    private String androidID;
+    private Location lastLoc;
 
     /**
      * A receiver for DetectedActivity objects broadcast by the
@@ -113,6 +119,13 @@ public class MainActivity extends ActionBarActivity implements
 
         // Get a receiver for broadcasts from ActivityDetectionIntentService.
         mBroadcastReceiver = new ActivityDetectionBroadcastReceiver();
+
+        // get androidID
+        //TextView textview_android_id = (TextView) findViewById(R.id.android_id);
+        androidID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        //textview_android_id.setText(androidID);
+
+        Log.i(TAG, "ID is: " + androidID);
 
         Button button_history;
         Button button_actkarma;
@@ -191,6 +204,7 @@ public class MainActivity extends ActionBarActivity implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(ActivityRecognition.API)
+                .addApi(LocationServices.API)
                 .build();
     }
 
@@ -229,6 +243,8 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
+        lastLoc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        Log.i(TAG, "Location is: (" + lastLoc.getLatitude() + ", " + lastLoc.getLongitude() + ")");
     }
 
     @Override
