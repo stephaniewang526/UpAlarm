@@ -71,8 +71,6 @@ public class MainActivity extends ActionBarActivity implements
         ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
 
     protected static final String TAG = "UpAlarm";
-    private String androidID;
-    private Location lastLoc;
 
     /**
      * A receiver for DetectedActivity objects broadcast by the
@@ -122,10 +120,9 @@ public class MainActivity extends ActionBarActivity implements
 
         // get androidID
         //TextView textview_android_id = (TextView) findViewById(R.id.android_id);
-        androidID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Constants.androidID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         //textview_android_id.setText(androidID);
 
-        Log.i(TAG, "ID is: " + androidID);
 
         Button button_history;
         Button button_actkarma;
@@ -243,8 +240,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
-        lastLoc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        Log.i(TAG, "Location is: (" + lastLoc.getLatitude() + ", " + lastLoc.getLongitude() + ")");
+        Constants.lastLoc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
     }
 
     @Override

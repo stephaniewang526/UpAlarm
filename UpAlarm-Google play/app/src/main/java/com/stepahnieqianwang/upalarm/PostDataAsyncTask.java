@@ -1,5 +1,6 @@
 package com.stepahnieqianwang.upalarm;
 
+import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.content.Context;
@@ -59,9 +60,6 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String> {
         Date date = new Date();
         String currentTime = dateFormat.format(date);
 
-        //determine userID
-        int userID = 1;
-
         //determine activity type
         int activity = 0;
         ArrayList<DetectedActivity> detectedActivitiesList = DetectedActivitiesIntentService.detectedActivities;
@@ -73,14 +71,17 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String> {
             }
         }
 
-        //TODO: determine location color
+        //determine location, id, and color
+        Location loc = Constants.lastLoc;
+        String id = Constants.androidID;
 
         try{
             // url where the data will be posted
             String postReceiverUrl = "http://52.11.244.12/data.php";
             Log.v(TAG, "postURL: " + postReceiverUrl);
             Log.v(TAG, "time now is: " + currentTime);
-
+            Log.v(TAG, "Location is: (" + Constants.lastLoc.getLatitude() + ", " + Constants.lastLoc.getLongitude() + ")");
+            Log.v(TAG, "ID is: " + Constants.androidID);
             // HttpClient
             HttpClient httpClient = new DefaultHttpClient();
 
@@ -88,10 +89,11 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String> {
             HttpPost httpPost = new HttpPost(postReceiverUrl);
 
             // add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-            nameValuePairs.add(new BasicNameValuePair("userID", String.valueOf(userID)));
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(10);
+            nameValuePairs.add(new BasicNameValuePair("userID", String.valueOf(id)));
             nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
             nameValuePairs.add(new BasicNameValuePair("activity", String.valueOf(activity)));
+            nameValuePairs.add(new BasicNameValuePair("loc", String.valueOf(loc)));
             nameValuePairs.add(new BasicNameValuePair("color", "red"));
 
 

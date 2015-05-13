@@ -5,6 +5,7 @@ package com.stepahnieqianwang.upalarm;
  */
 import android.content.Context;
 import android.content.res.Resources;
+import android.location.Location;
 
 import com.google.android.gms.location.DetectedActivity;
 
@@ -25,6 +26,9 @@ public final class Constants {
 
     public static final String DETECTED_ACTIVITIES = PACKAGE_NAME + ".DETECTED_ACTIVITIES";
 
+    public static String androidID;
+
+    public static Location lastLoc;
     /**
      * The desired time between activity detections. Larger values result in fewer activity
      * detections while improving battery life. A value of 0 results in activity detections at the
