@@ -125,6 +125,7 @@ public class MainActivity extends ActionBarActivity implements
 
         new RetrieveAllAsyncTask().execute();
         new RetrieveIndAsyncTask().execute();
+
         Button button_history;
         Button button_actkarma;
         Button button_community;
@@ -425,4 +426,67 @@ public class MainActivity extends ActionBarActivity implements
             updateDetectedActivitiesList(updatedActivities);
         }
     }
+
+    private void runOnPostExecute(String string) {
+        Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+    }
+
+    private class MyTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... strings){
+            try {
+                retrieveData();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private String retrieveData(){
+            String id = Constants.androidID;
+
+            try{
+                // url where the data will be posted
+                String postReceiverUrl = "http://52.11.244.12/lastMove.php";
+                //Log.v(TAG, "postURL: " + postReceiverUrl);
+                //Log.v(TAG, "ID is: " + Constants.androidID);
+
+                // HttpClient
+                HttpClient httpClient = new DefaultHttpClient();
+
+                // post header
+                HttpPost httpPost = new HttpPost(postReceiverUrl);
+
+                // add your data
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("userID", Constants.androidID));
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                // execute HTTP post request
+                HttpResponse response = httpClient.execute(httpPost);
+                HttpEntity resEntity = response.getEntity();
+
+                if (resEntity != null) {
+                    String responseStr = EntityUtils.toString(resEntity).trim();
+                    Log.v(TAG, "Response: " +  responseStr);
+                    return responseStr;
+                    // you can add an if statement here and do other actions based on the response
+                }
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "0000-00-00 00:00:00";
+        }
+
+        protected void onPostExecute(String result){
+            runOnPostExecute(result);
+        }
+
+    }
+
 }
