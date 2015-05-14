@@ -89,12 +89,12 @@ public class PostDataAsyncTask extends AsyncTask<String, String, String> {
             HttpPost httpPost = new HttpPost(postReceiverUrl);
 
             // add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(10);
-            nameValuePairs.add(new BasicNameValuePair("userID", String.valueOf(id)));
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
+            nameValuePairs.add(new BasicNameValuePair("userID", Constants.androidID));
+            nameValuePairs.add(new BasicNameValuePair("lat", ""+Constants.lastLoc.getLatitude()));
+            nameValuePairs.add(new BasicNameValuePair("lng", ""+Constants.lastLoc.getLongitude()));
             nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
             nameValuePairs.add(new BasicNameValuePair("activity", String.valueOf(activity)));
-            nameValuePairs.add(new BasicNameValuePair("loc", String.valueOf(loc)));
-            nameValuePairs.add(new BasicNameValuePair("color", "red"));
 
 
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
