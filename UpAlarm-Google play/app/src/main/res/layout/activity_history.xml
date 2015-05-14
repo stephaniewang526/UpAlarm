@@ -20,7 +20,7 @@
         android:layout_below="@+id/app_name"
         android:text="@string/day_history" />
 
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/day_bar"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
         android:layout_below="@+id/day_history"
         android:layout_marginTop="@dimen/progress_bar_top_margin"
         android:minHeight="@dimen/progress_bar_min_height"
-        android:progress="1" />
+        android:progress="1" />-->
 
     <TextView
         android:id="@+id/week_history"
@@ -37,10 +37,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/wide_space"
         android:layout_marginLeft="@dimen/narrow_space"
-        android:layout_below="@+id/day_bar"
+        android:layout_below="@+id/day_history"
         android:text="@string/week_history" />
 
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/week_bar"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
@@ -49,7 +49,7 @@
         android:layout_below="@+id/week_history"
         android:layout_marginTop="@dimen/progress_bar_top_margin"
         android:minHeight="@dimen/progress_bar_min_height"
-        android:progress="1" />
+        android:progress="1" />-->
 
     <TextView
         android:id="@+id/month_history"
@@ -57,10 +57,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/wide_space"
         android:layout_marginLeft="@dimen/narrow_space"
-        android:layout_below="@+id/week_bar"
+        android:layout_below="@+id/week_history"
         android:text="@string/month_history" />
 
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/month_bar"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
@@ -69,5 +69,14 @@
         android:layout_below="@+id/month_history"
         android:layout_marginTop="@dimen/progress_bar_top_margin"
         android:minHeight="@dimen/progress_bar_min_height"
-        android:progress="1" />
+        android:progress="1" />-->
+
+    <TextView
+        android:id="@+id/year_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/wide_space"
+        android:layout_marginLeft="@dimen/narrow_space"
+        android:layout_below="@+id/month_history"
+        android:text="@string/year_history" />
 </RelativeLayout>
