@@ -123,7 +123,7 @@ public class MainActivity extends ActionBarActivity implements
         Constants.androidID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         //textview_android_id.setText(androidID);
 
-
+        new RetrieveAllAsyncTask().execute();
         Button button_history;
         Button button_actkarma;
         Button button_community;

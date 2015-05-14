@@ -9,6 +9,8 @@ import android.location.Location;
 
 import com.google.android.gms.location.DetectedActivity;
 
+import org.json.JSONObject;
+
 public final class Constants {
     private Constants() {
     }
@@ -29,6 +31,10 @@ public final class Constants {
     public static String androidID;
 
     public static Location lastLoc;
+
+    public static JSONObject RETRIEVED_ALL;
+
+    public static JSONObject SELF_KARMA;
     /**
      * The desired time between activity detections. Larger values result in fewer activity
      * detections while improving battery life. A value of 0 results in activity detections at the

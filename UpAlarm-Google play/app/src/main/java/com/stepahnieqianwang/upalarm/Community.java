@@ -34,6 +34,10 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Random;
 
 
@@ -50,8 +54,8 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
 
     protected int RED = Color.argb(50, 255, 0, 0);
     protected int GREEN = Color.argb(50, 0, 255, 0);
-    protected int BLUE = Color.argb(50, 0, 0, 255);
     protected int YELLOW = Color.argb(50, 255, 255, 0);
+    protected int BLACK = Color.argb(100, 255, 255, 255);
 
     private Context context;
 
@@ -99,8 +103,6 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
         // updates. Gets the best and most recent location currently available, which may be null
         // in rare cases when a location is not available.
         Context context = getApplicationContext();
-        //Toast.makeText(context, "Initial Connect!", Toast.LENGTH_SHORT).show();
-        playConnected = true;
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
@@ -108,24 +110,88 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
         //        String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_SHORT).show();
 
         LatLng ith = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-
+        Log.v("ITH: ", ""+ith);
         gMap.setMyLocationEnabled(true);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ith, 17));
 
-        /*
-        gMap.addMarker(new MarkerOptions()
-                .title("Ithaca")
-                .snippet("It's Gorges")
-                .position(ith))
-                .setFlat(true);
-        */
         if (!hasDrawn) {
-            CircleOptions circleOptions = new CircleOptions()
-                    .fillColor(BLUE)
-                    .strokeColor(BLUE)
-                    .center(ith)
-                    .radius(5); // In meters
 
+            JSONObject toPlot = Constants.RETRIEVED_ALL;
+            JSONArray ind = new JSONArray();
+            JSONArray all = new JSONArray();
+
+            try {
+                ind = toPlot.getJSONArray("ind");
+                Log.v("HEATMAP: ", ind.toString());
+                int indLength = ind.length();
+                JSONObject tmpJSON;
+                for (int i = 0; i<indLength; i++) {
+                    tmpJSON = ind.getJSONObject(i);
+                    Log.v("JSONARRAY: ", tmpJSON.toString());
+                    int thisColor;
+                    switch (tmpJSON.getString("color")) {
+                        case "YELLOW":
+                            thisColor = YELLOW;
+                            break;
+                        case "GREEN":
+                            thisColor = GREEN;
+                            break;
+                        default:
+                        case "RED":
+                            thisColor = RED;
+                            break;
+                    }
+                    LatLng thisLoc = new LatLng(Double.parseDouble(tmpJSON.getString("lat")), Double.parseDouble(tmpJSON.getString("lng")));
+                    Log.v("CIRCLES: ", ""+thisColor);
+                    Log.v("CIRCLES: ", ""+thisLoc);
+                    CircleOptions tmpCO = new CircleOptions()
+                            .fillColor(thisColor)
+                            .strokeColor(BLACK)
+                            .center(thisLoc)
+                            .radius(7);
+                    gMap.addCircle(tmpCO);
+                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(thisLoc, 17));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                all = toPlot.getJSONArray("all");
+                Log.v("HEATMAP: ", all.toString());
+                int allLength = all.length();
+                JSONObject tmpJSON;
+                for (int i = 0; i<allLength; i++) {
+                    tmpJSON = all.getJSONObject(i);
+                    Log.v("JSONARRAY: ", tmpJSON.toString());
+                    int thisColor;
+                    switch (tmpJSON.getString("color")) {
+                        case "YELLOW":
+                            thisColor = YELLOW;
+                            break;
+                        case "GREEN":
+                            thisColor = GREEN;
+                            break;
+                        default:
+                        case "RED":
+                            thisColor = RED;
+                            break;
+                    }
+                    LatLng thisLoc = new LatLng(Double.parseDouble(tmpJSON.getString("lat")), Double.parseDouble(tmpJSON.getString("lng")));
+                    Log.v("CIRCLES: ", ""+thisColor);
+                    Log.v("CIRCLES: ", ""+thisLoc);
+                    CircleOptions tmpCO = new CircleOptions()
+                            .fillColor(thisColor)
+                            .strokeColor(thisColor)
+                            .center(thisLoc)
+                            .radius(7);
+                    gMap.addCircle(tmpCO);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            /*
             // roughly barton
             LatLng hub1 = new LatLng(   mLastLocation.getLatitude() + 0.0012f,
                                         mLastLocation.getLongitude() + 0.0005f);
@@ -183,13 +249,7 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
                             mLastLocation.getLongitude() + (myRand.nextFloat() * 7 - 1.5f) * 0.0001f));
                     gMap.addCircle(tmpCO);
                 }
-            }
-
-            // Get back the mutable Circle
-            Circle circle = gMap.addCircle(circleOptions);
-            Circle circle2 = gMap.addCircle(circleO2);
-            Circle circle3 = gMap.addCircle(circleO3);
-
+            }*/
             hasDrawn = true;
         }
 
