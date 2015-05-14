@@ -38,9 +38,10 @@
     <string name="activity_updates_added">Activity updates added</string>
     <string name="activity_updates_removed">Activity updates removed</string>
 
-    <string name="day_history">Today</string>
-    <string name="week_history">This Week</string>
-    <string name="month_history">This Month</string>
+    <string name="day_history">Today: </string>
+    <string name="week_history">This Week: </string>
+    <string name="month_history">This Month: </string>
+    <string name="year_history">This Year: </string>
 
     <string name="not_connected">GoogleApiClient not yet connected. Try again.</string>
 

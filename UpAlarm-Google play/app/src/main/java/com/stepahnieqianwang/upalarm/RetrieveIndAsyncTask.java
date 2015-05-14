@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by Bo on 5/9/15.
  */
-public class RetrieveAllAsyncTask extends AsyncTask<String, String, String> {
+public class RetrieveIndAsyncTask extends AsyncTask<String, String, String> {
     protected static final String TAG = "Retrieve Data";
 
     protected void onPreExecute() {
@@ -52,7 +52,7 @@ public class RetrieveAllAsyncTask extends AsyncTask<String, String, String> {
 
         try{
             // url where the data will be posted
-            String postReceiverUrl = "http://52.11.244.12/retrieveAll.php";
+            String postReceiverUrl = "http://52.11.244.12/retrieveInd.php";
             //Log.v(TAG, "postURL: " + postReceiverUrl);
             //Log.v(TAG, "ID is: " + Constants.androidID);
 
@@ -76,11 +76,11 @@ public class RetrieveAllAsyncTask extends AsyncTask<String, String, String> {
                 String responseStr = EntityUtils.toString(resEntity).trim();
                 try {
                     jsonResult = new JSONObject(responseStr);
-                    Constants.RETRIEVED_ALL = jsonResult;
+                    Constants.SELF_KARMA = jsonResult;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //Log.v(TAG, "Response: " +  jsonResult.toString());
+                Log.v(TAG, "Response: " +  jsonResult.toString());
 
                 // you can add an if statement here and do other actions based on the response
             }

@@ -1,12 +1,18 @@
 package com.stepahnieqianwang.upalarm;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class History extends ActionBarActivity {
@@ -16,6 +22,21 @@ public class History extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        JSONObject karmas = Constants.SELF_KARMA;
+        Log.v("HISTORY: ", karmas.toString());
+        TextView tv_day = (TextView) findViewById(R.id.day_history);
+        TextView tv_week = (TextView) findViewById(R.id.week_history);
+        TextView tv_month = (TextView) findViewById(R.id.month_history);
+        TextView tv_year = (TextView) findViewById(R.id.year_history);
+
+        try {
+            tv_day.setText("Today: " + karmas.getString("day"));
+            tv_week.setText("This week: " + karmas.getString("week"));
+            tv_month.setText("This month: " + karmas.getString("month"));
+            tv_year.setText("This year: " + karmas.getString("year"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -2,8 +2,13 @@ package com.stepahnieqianwang.upalarm;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class Actkarma extends ActionBarActivity {
@@ -12,6 +17,14 @@ public class Actkarma extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actkarma);
+        TextView tv_karma = (TextView) findViewById(R.id.actkarma);
+        JSONObject karmas = Constants.SELF_KARMA;
+
+        try {
+            tv_karma.setText("" + karmas.getString("total"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 

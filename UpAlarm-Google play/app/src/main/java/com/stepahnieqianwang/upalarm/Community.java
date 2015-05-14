@@ -55,7 +55,6 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
     protected int RED = Color.argb(50, 255, 0, 0);
     protected int GREEN = Color.argb(50, 0, 255, 0);
     protected int YELLOW = Color.argb(50, 255, 255, 0);
-    protected int BLACK = Color.argb(100, 255, 255, 255);
 
     private Context context;
 
@@ -117,8 +116,8 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
         if (!hasDrawn) {
 
             JSONObject toPlot = Constants.RETRIEVED_ALL;
-            JSONArray ind = new JSONArray();
-            JSONArray all = new JSONArray();
+            JSONArray ind;
+            JSONArray all;
 
             try {
                 ind = toPlot.getJSONArray("ind");
@@ -146,7 +145,7 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
                     Log.v("CIRCLES: ", ""+thisLoc);
                     CircleOptions tmpCO = new CircleOptions()
                             .fillColor(thisColor)
-                            .strokeColor(BLACK)
+                            .strokeColor(Color.BLACK)
                             .center(thisLoc)
                             .radius(7);
                     gMap.addCircle(tmpCO);
@@ -191,7 +190,7 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
                 e.printStackTrace();
             }
 
-            /*
+
             // roughly barton
             LatLng hub1 = new LatLng(   mLastLocation.getLatitude() + 0.0012f,
                                         mLastLocation.getLongitude() + 0.0005f);
@@ -219,10 +218,8 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
                 int tmpColor;
                 switch (rndColor) {
                     case 1:
-                        tmpColor = GREEN;
-                        break;
                     case 2:
-                        tmpColor = BLUE;
+                        tmpColor = GREEN;
                         break;
                     case 3:
                         tmpColor = YELLOW;
@@ -249,7 +246,7 @@ public class Community extends ActionBarActivity implements OnMapReadyCallback, 
                             mLastLocation.getLongitude() + (myRand.nextFloat() * 7 - 1.5f) * 0.0001f));
                     gMap.addCircle(tmpCO);
                 }
-            }*/
+            }
             hasDrawn = true;
         }
 

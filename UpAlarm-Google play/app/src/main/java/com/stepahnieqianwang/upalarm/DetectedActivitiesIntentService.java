@@ -58,5 +58,6 @@ public class DetectedActivitiesIntentService extends IntentService {
         localIntent.putExtra(Constants.ACTIVITY_EXTRA, detectedActivities);
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
         new PostDataAsyncTask().execute();
+        new RetrieveIndAsyncTask().execute();
     }
 }
