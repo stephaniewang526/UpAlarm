@@ -1,1 +1,1 @@
-# UpAlarmSpring2015
+# UpAlarm by Stephanie Wang and Bo Long
